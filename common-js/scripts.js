@@ -1,23 +1,23 @@
 
 (function ($) {
 
-    "use strict";
-	
-	
+	"use strict";
+
+
 
 	// LINE PROGRESS BAR
 	enableLineProgress();
-	
+
 	// RADIAL PROGRESS BAR
 	enableRadialProgress();
-	
+
 	// ACCORDIAN
 	panelAccordian();
 
-	$(window).on('load', function(){
-		
+	$(window).on('load', function () {
+
 		// ISOTOPE PORTFOLIO WITH FILTER
-		if(isExists('.portfolioContainer')){
+		if (isExists('.portfolioContainer')) {
 			var $container = $('.portfolioContainer');
 			$container.isotope({
 				filter: '*',
@@ -27,11 +27,11 @@
 					queue: false
 				}
 			});
-		 
-			$('.portfolioFilter a').click(function(){
+
+			$('.portfolioFilter a').click(function () {
 				$('.portfolioFilter .current').removeClass('current');
 				$(this).addClass('current');
-		 
+
 				var selector = $(this).attr('data-filter');
 				$container.isotope({
 					filter: selector,
@@ -40,55 +40,82 @@
 						easing: 'linear',
 						queue: false
 					}
-				 });
-				 return false;
-			}); 
+				});
+				return false;
+			});
 		}
-	
+
+		//debs_obrien manthanbhatt
+		fetch('https://dev.to/api/articles?username=manthanbhatt').then(response => response.json())
+			.then(data => {
+				console.log(data);
+				data.forEach(itm => {
+					const elem = document.getElementById('blog');
+					const htmlString = `
+						<div class="card border-radius-10">
+							<img src="`+ itm.social_image + `" />
+							<div class="card-body p-4 bg-dark">
+								<h4 class="text-dark mb-3">`+itm.title+`</h4>
+								<p>
+									`+itm.description+`
+									<a class="btn btn-light" href='`+itm.canonical_url+`' target="blank">Read more</a>
+								</p>
+							</div>
+						</div>
+					`;
+					const div = document.createElement('div');
+					div.classList.add('col-md-6');
+					div.classList.add('p-4');
+					div.innerHTML = htmlString.trim();
+						console.log(div)
+					elem.appendChild(div);
+				});
+			});
+
 	});
-	
-	
-	$('a[href="#"]').on('click', function(event){
+
+
+	$('a[href="#"]').on('click', function (event) {
 		return;
 	});
-	
-	
-	if ( $.isFunction($.fn.fluidbox) ) {
+
+
+	if ($.isFunction($.fn.fluidbox)) {
 		$('a').fluidbox();
 	}
-	
+
 	var countCounterUp = 0;
-	
-	var a = 0 ;
-	
+
+	var a = 0;
+
 	countCounterUp = enableCounterUp(countCounterUp);
-	
-	$(window).on('scroll', function(){
-		
+
+	$(window).on('scroll', function () {
+
 		countCounterUp = enableCounterUp(countCounterUp);
-	
+
 	});
-	
-	
+
+
 })(jQuery);
 
-function panelAccordian(){
-	
+function panelAccordian() {
+
 	var panelTitle = $('.panel-title');
-	panelTitle.on('click', function(){
+	panelTitle.on('click', function () {
 		$('.panel-title').removeClass('active');
 		$(this).toggleClass('active');
-		
+
 	});
-	
+
 }
 
-function enableRadialProgress(){
-	
-	$(".radial-progress").each(function(){
+function enableRadialProgress() {
+
+	$(".radial-progress").each(function () {
 		var $this = $(this),
 			progPercent = $this.data('prog-percent');
-			
+
 		var bar = new ProgressBar.Circle(this, {
 			color: '#aaa',
 			strokeWidth: 3,
@@ -96,12 +123,12 @@ function enableRadialProgress(){
 			easing: 'easeInOut',
 			duration: 1400,
 			text: {
-				
+
 			},
 			from: { color: '#aaa', width: 1 },
 			to: { color: '#FEAE01', width: 3 },
 			// Set default step function for all animate calls
-			step: function(state, circle) {
+			step: function (state, circle) {
 				circle.path.setAttribute('stroke', state.color);
 				circle.path.setAttribute('stroke-width', state.width);
 
@@ -114,20 +141,20 @@ function enableRadialProgress(){
 
 			}
 		});
-		
-		$(this).waypoint(function(){
-		   bar.animate(progPercent);  
-		},{offset: "90%"})
-		
+
+		$(this).waypoint(function () {
+			bar.animate(progPercent);
+		}, { offset: "90%" })
+
 	});
 }
 
-function enableLineProgress(){
-	
-	$(".line-progress").each(function(){
+function enableLineProgress() {
+
+	$(".line-progress").each(function () {
 		var $this = $(this),
 			progPercent = $this.data('prog-percent');
-			
+
 		var bar = new ProgressBar.Line(this, {
 			strokeWidth: 1,
 			easing: 'easeInOut',
@@ -135,36 +162,36 @@ function enableLineProgress(){
 			color: '#FEAE01',
 			trailColor: '#eee',
 			trailWidth: 1,
-			svgStyle: {width: '100%', height: '100%'},
+			svgStyle: { width: '100%', height: '100%' },
 			text: {
 				style: {
-					
+
 				},
 			},
-			from: {color: '#FFEA82'},
-			to: {color: '#ED6A5A'},
+			from: { color: '#FFEA82' },
+			to: { color: '#ED6A5A' },
 			step: (state, bar) => {
 				bar.setText(Math.round(bar.value() * 100) + ' %');
 			}
 		});
-		
-		$(this).waypoint(function(){
-		   bar.animate(progPercent);  
-		},{offset: "90%"})
-		
+
+		$(this).waypoint(function () {
+			bar.animate(progPercent);
+		}, { offset: "90%" })
+
 	});
 }
 
-function enableCounterUp(a){
-	
+function enableCounterUp(a) {
+
 	var counterElement;
-	
-	if(isExists('#counter')){ counterElement = $('#counter'); }
-	else{ return; }
-		
+
+	if (isExists('#counter')) { counterElement = $('#counter'); }
+	else { return; }
+
 	var oTop = $('#counter').offset().top - window.innerHeight;
 	if (a == 0 && $(window).scrollTop() > oTop) {
-		$('.counter-value').each(function() {
+		$('.counter-value').each(function () {
 			var $this = $(this),
 				countDuration = $this.data('duration'),
 				countTo = $this.attr('data-count');
@@ -172,14 +199,14 @@ function enableCounterUp(a){
 				countNum: $this.text()
 			}).animate({
 				countNum: countTo
-			},{
+			}, {
 
 				duration: countDuration,
 				easing: 'swing',
-				step: function() {
+				step: function () {
 					$this.text(Math.floor(this.countNum));
 				},
-				complete: function() {
+				complete: function () {
 					$this.text(this.countNum);
 				}
 
@@ -191,8 +218,8 @@ function enableCounterUp(a){
 	return a;
 }
 
-function isExists(elem){
-	if ($(elem).length > 0) { 
+function isExists(elem) {
+	if ($(elem).length > 0) {
 		return true;
 	}
 	return false;
