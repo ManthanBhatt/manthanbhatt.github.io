@@ -293,3 +293,27 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 }
+
+#blog {
+	max-height: 30rem;
+    overflow: auto;
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+	background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+	background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+	background: #555; 
+  }
